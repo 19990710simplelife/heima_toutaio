@@ -1,9 +1,9 @@
 <!--
- * @Description: 请输入描述信息
+ * @Description: 根组件
  * @Autor: 执手天涯
  * @Date: 2022-03-27 19:51:35
  * @LastEditors: 执手天涯
- * @LastEditTime: 2022-03-27 21:43:01
+ * @LastEditTime: 2022-03-27 22:15:20
 -->
 <template>
   <div id="app">

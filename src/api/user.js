@@ -3,7 +3,7 @@
  * @Autor: 执手天涯
  * @Date: 2022-03-28 16:13:30
  * @LastEditors: 执手天涯
- * @LastEditTime: 2022-03-28 20:12:19
+ * @LastEditTime: 2022-03-30 21:19:52
  */
 import request from '@/utils/request'
 
@@ -29,5 +29,16 @@ export const getcode = mobile => {
   return request({
     url: `/mp/v1_0/captchas/${mobile}`,
     method: 'GET'
+  })
+}
+
+/**
+ * 用于获取用户自己的信息
+ * @returns
+ */
+export const getUserInfo = () => {
+  return request({
+    method: 'GET',
+    url: '/app/v1_0/user'
   })
 }

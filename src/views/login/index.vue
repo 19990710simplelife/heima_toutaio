@@ -3,11 +3,14 @@
  * @Autor: 执手天涯
  * @Date: 2022-03-27 22:58:15
  * @LastEditors: 执手天涯
- * @LastEditTime: 2022-03-28 20:27:18
+ * @LastEditTime: 2022-03-30 21:22:55
 -->
 <template>
   <div class="login-container">
-    <van-nav-bar class="page-nav-bar" title="登录" />
+    <van-nav-bar class="page-nav-bar" title="登录">
+      <!-- 左侧返回图标 -->
+      <van-icon @click="$router.back()" slot="left" name="cross"></van-icon>
+    </van-nav-bar>
     <van-form ref="loginForm" @submit="onSubmit">
       <!-- 用户名相关信息 -->
       <van-field
@@ -157,8 +160,9 @@ export default {
       try {
         const loginRes = await loginAPI(user)
         this.$toast.success('登录成功!')
-        console.log(loginRes)
         this.$store.commit('setUser', loginRes.data)
+        // 预留一个bug
+        this.$router.back()
       } catch (error) {
         if (error.response.status === 400) {
           this.$toast.fail('手机号或验证码错误！')

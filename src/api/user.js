@@ -9,7 +9,7 @@ import request from '@/utils/request'
 
 /**
  * 封装一个登录的网络请求方法
- * @param {外界传递的参数} params
+ * @param {外界传递的参数} data
  * @returns
  */
 export const login = data => {

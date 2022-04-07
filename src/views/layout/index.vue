@@ -3,12 +3,12 @@
  * @Autor: 执手天涯
  * @Date: 2022-03-30 14:42:57
  * @LastEditors: 执手天涯
- * @LastEditTime: 2022-03-30 19:40:44
+ * @LastEditTime: 2022-04-07 19:48:28
 -->
 
 <template>
   <div class="layout-container">
-    <router-view></router-view>
+      <router-view></router-view>
     <van-tabbar class="layout-tabbar" route>
       <van-tabbar-item to="/">
         <i slot="icon" class="iconfont icon-shouye"></i>

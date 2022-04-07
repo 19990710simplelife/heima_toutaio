@@ -3,7 +3,7 @@
  * @Autor: 执手天涯
  * @Date: 2022-03-28 16:13:30
  * @LastEditors: 执手天涯
- * @LastEditTime: 2022-03-30 21:19:52
+ * @LastEditTime: 2022-04-07 19:02:49
  */
 import request from '@/utils/request'
 
@@ -40,5 +40,12 @@ export const getUserInfo = () => {
   return request({
     method: 'GET',
     url: '/app/v1_0/user'
+  })
+}
+
+export const getUserChannels = () => {
+  return request({
+    url: '/app/v1_0/user/channels',
+    method: 'GET'
   })
 }

@@ -3,12 +3,12 @@
  * @Autor: 执手天涯
  * @Date: 2022-03-30 14:55:52
  * @LastEditors: 执手天涯
- * @LastEditTime: 2022-04-07 19:49:44
+ * @LastEditTime: 2022-04-07 22:15:45
 -->
 <template>
   <div class="home-container">
     <!-- 头部导航栏 -->
-    <van-nav-bar class="page-nav-bar">
+    <van-nav-bar fixed class="page-nav-bar">
       <van-button
         slot="title"
         type="info"
@@ -21,7 +21,7 @@
     </van-nav-bar>
 
     <!-- 频道列表 -->
-    <van-tabs class="channel-tabs" v-model="active" animated swipeable>
+    <van-tabs  class="channel-tabs" v-model="active" animated swipeable>
       <van-tab v-for="item in channels" :key="item.id" :title="item.name"
         ><ArticleList :channel="item"></ArticleList
       ></van-tab>
@@ -77,6 +77,7 @@ export default {
 <style scoped lang='less'>
 .home-container {
   padding-bottom: 100px;
+  padding-top: 174px;
   // 导航栏样式
   /deep/.van-nav-bar__title {
     max-width: unset;
@@ -96,6 +97,11 @@ export default {
   // 频道列表样式
   /deep/.channel-tabs {
     .van-tabs__wrap {
+      position: fixed;
+      top: 92px;
+      left: 0;
+      right: 0;
+      z-index: 1;
       height: 82px;
     }
     // 频道列表边框样式

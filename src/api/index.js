@@ -3,7 +3,7 @@
  * @Autor: 执手天涯
  * @Date: 2022-03-28 16:16:38
  * @LastEditors: 执手天涯
- * @LastEditTime: 2022-04-08 10:01:22
+ * @LastEditTime: 2022-04-08 17:33:20
  */
 
 import {
@@ -18,7 +18,9 @@ import {
 } from './articles'
 
 import {
-  getAllChannels
+  getAllChannels,
+  addUserChannel,
+  deleteUserChannel
 } from './channels'
 // 用户相关的请求
 export const loginAPI = login
@@ -31,3 +33,5 @@ export const getArticleListAPI = getArticleList
 
 // 频道相关的列表
 export const getAllChannelsAPI = getAllChannels
+export const addUserChannelAPI = addUserChannel
+export const deleteUserChannelAPI = deleteUserChannel

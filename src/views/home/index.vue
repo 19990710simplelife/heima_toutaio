@@ -1,9 +1,9 @@
 <!--
  * @Description: 首页
- * @Autor: 执手天涯
+ * @Autour: 执手天涯
  * @Date: 2022-03-30 14:55:52
  * @LastEditors: 执手天涯
- * @LastEditTime: 2022-04-08 11:16:16
+ * @LastEditTime: 2022-04-08 22:10:39
 -->
 <template>
   <div class="home-container">
@@ -32,7 +32,7 @@
       >
         <i class="iconfont icon-gengduo"></i>
       </div>
-      <div slot="nav-right" class="placeholear"></div>
+      <div slot="nav-right" class="placeholder"></div>
     </van-tabs>
 
     <!--  -->
@@ -56,6 +56,8 @@
 import { getUserChannelsAPI } from '@/api/index.js'
 import ArticleList from './components/article-list.vue'
 import ChannelEdit from './components/channel-edit.vue'
+import { getItem } from '@/utils/storage.js'
+import { mapState } from 'vuex'
 export default {
   name: 'HomeIndex',
   // 注册组件
@@ -71,7 +73,9 @@ export default {
     }
   },
   // 计算属性
-  computed: {},
+  computed: {
+    ...mapState(['user'])
+  },
   // 侦听器
   watch: {},
   // 生命周期创建阶段
@@ -84,11 +88,25 @@ export default {
   methods: {
     // 获取频道数据
     async loadChannels () {
+      // 用户已登录，获取用户列表数据
       try {
-        const { data } = await getUserChannelsAPI()
-        this.channels = data.data.channels
+        let channels = []
+        if (this.user) {
+          const { data } = await getUserChannelsAPI()
+          channels = data.data.channels
+        } else {
+          // 用户未登录
+          if (getItem('TOUTIAO_CHANNELS')) {
+            channels = getItem('TOUTIAO_CHANNELS')
+          } else {
+            // 请求默认的频道列表
+            const { data } = await getUserChannelsAPI()
+            channels = data.data.channels
+          }
+        }
+        this.channels = channels
       } catch (error) {
-        this.$toast('获取频道数据失败')
+        this.$toast('获取频道数据失败！')
       }
     },
 
@@ -180,7 +198,7 @@ export default {
         background-size: contain;
       }
     }
-    .placeholear {
+    .placeholder {
       flex-shrink: 0;
       width: 66px;
       height: 82px;

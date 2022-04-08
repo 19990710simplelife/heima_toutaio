@@ -3,7 +3,7 @@
  * @Author: 执手天涯
  * @Date: 2022-04-08 08:59:12
  * @LastEditors: 执手天涯
- * @LastEditTime: 2022-04-08 11:20:48
+ * @LastEditTime: 2022-04-08 21:58:15
  * @version: 1.0
 -->
 <template>
@@ -63,7 +63,13 @@
 </template>
 
 <script>
-import { getAllChannelsAPI } from '@/api/index.js'
+import {
+  getAllChannelsAPI,
+  addUserChannelAPI,
+  deleteUserChannelAPI
+} from '@/api/index.js'
+import { mapState } from 'vuex'
+import { setItem } from '@/utils/storage.js'
 export default {
   props: {
     Mychannels: {
@@ -80,6 +86,7 @@ export default {
     // 获取所有频道数据
     this.loadAllChannels()
   },
+
   data () {
     return {
       // 所有的频道数据
@@ -88,6 +95,7 @@ export default {
       fiexChannel: [0] // 不允许删除
     }
   },
+
   methods: {
     //   加载所有的频道列表
     async loadAllChannels () {
@@ -98,9 +106,25 @@ export default {
         this.$toast('获取推荐列表失败！')
       }
     },
+
     // 添加频道
-    addChannel (channel) {
+    async addChannel (channel) {
+      // 根据用户是否登录进行数据存储
       this.Mychannels.push(channel)
+      if (this.user) {
+        // 存储到服务器
+        try {
+          await addUserChannelAPI({
+            id: channel.id,
+            seq: this.Mychannels.length
+          })
+        } catch (error) {
+          this.$toast('添加频道列表失败！')
+        }
+      } else {
+        // 未登录，存储到本地
+        setItem('TOUTIAO_CHANNELS', this.Mychannels)
+      }
     },
 
     // 点击我的频道两种操作
@@ -110,14 +134,33 @@ export default {
           this.$toast('该频道不能删除!')
           return
         }
+        this.Mychannels.splice(index, 1)
         // 编辑状态，移除我的频道
         if (index <= this.activeIndex) {
           this.$emit('updateActive', this.activeIndex - 1, true)
         }
-        this.Mychannels.splice(index, 1)
+        // 处理持久化删除
+        this.deleteChannel(channel)
       } else {
         // 跳转首页中的我的频道，子组件向夫组件传递数值
         this.$emit('updateActive', index, false)
+      }
+    },
+
+    /**
+     * 删除的持久化操作
+     */
+    async deleteChannel (channel) {
+      try {
+        if (this.user) {
+          // 更新数据到线上
+          await deleteUserChannelAPI(channel.id)
+        } else {
+          // 更新到本地
+          setItem('TOUTIAO_CHANNELS', this.Mychannels)
+        }
+      } catch (error) {
+        this.$toast('操作失败！')
       }
     }
   },
@@ -129,20 +172,9 @@ export default {
           return mychannels.id === channel.id
         })
       })
-      //   const CommendChannels = []
-      //   this.allChannels.forEach((channel) => {
-      //     // 利用find遍历对比数组，返回一个布尔值
-      //     const res = this.Mychannels.find((mychannel) => {
-      //       return (mychannel.id = channel.id)
-      //     })
-      //     // 如果我的频道中没有该频道
-      //     if (!res) {
-      //       CommendChannels.push(channel)
-      //     }
-      //   })
-      //   // 返回计算结果
-      //   return CommendChannels
-    }
+    },
+
+    ...mapState(['user'])
   }
 }
 </script>

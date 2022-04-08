@@ -3,7 +3,7 @@
  * @Autor: 执手天涯
  * @Date: 2022-03-28 16:13:30
  * @LastEditors: 执手天涯
- * @LastEditTime: 2022-04-07 19:02:49
+ * @LastEditTime: 2022-04-08 10:01:02
  */
 import request from '@/utils/request'
 
@@ -43,6 +43,10 @@ export const getUserInfo = () => {
   })
 }
 
+/**
+ *获取我的频道
+ * @returns
+ */
 export const getUserChannels = () => {
   return request({
     url: '/app/v1_0/user/channels',

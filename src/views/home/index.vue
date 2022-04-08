@@ -3,7 +3,7 @@
  * @Autor: 执手天涯
  * @Date: 2022-03-30 14:55:52
  * @LastEditors: 执手天涯
- * @LastEditTime: 2022-04-07 22:15:45
+ * @LastEditTime: 2022-04-08 11:16:16
 -->
 <template>
   <div class="home-container">
@@ -21,32 +21,53 @@
     </van-nav-bar>
 
     <!-- 频道列表 -->
-    <van-tabs  class="channel-tabs" v-model="active" animated swipeable>
+    <van-tabs class="channel-tabs" v-model="active" animated swipeable>
       <van-tab v-for="item in channels" :key="item.id" :title="item.name"
         ><ArticleList :channel="item"></ArticleList
       ></van-tab>
-      <div slot="nav-right" class="hanburger-btn">
+      <div
+        slot="nav-right"
+        class="hanburger-btn"
+        @click="IsChannelEditShow = true"
+      >
         <i class="iconfont icon-gengduo"></i>
       </div>
       <div slot="nav-right" class="placeholear"></div>
     </van-tabs>
+
+    <!--  -->
+    <van-popup
+      v-model="IsChannelEditShow"
+      closeable
+      position="bottom"
+      close-icon-position="top-left"
+      :style="{ height: '100%' }"
+    >
+      <ChannelEdit
+        :Mychannels="channels"
+        :activeIndex="active"
+        @updateActive="updateActiveChannel"
+      ></ChannelEdit>
+    </van-popup>
   </div>
 </template>
 
 <script>
 import { getUserChannelsAPI } from '@/api/index.js'
 import ArticleList from './components/article-list.vue'
+import ChannelEdit from './components/channel-edit.vue'
 export default {
   name: 'HomeIndex',
   // 注册组件
-  components: { ArticleList },
+  components: { ArticleList, ChannelEdit },
   // 定义props
   props: {},
   // 数据对象
   data () {
     return {
       active: 0,
-      channels: [] // 频道列表
+      channels: [], // 频道列表
+      IsChannelEditShow: false // 控制是否显示弹出层
     }
   },
   // 计算属性
@@ -69,6 +90,13 @@ export default {
       } catch (error) {
         this.$toast('获取频道数据失败')
       }
+    },
+
+    // 修改激活的索引
+    updateActiveChannel (index, IsChannelEditShow = true) {
+      this.active = index
+      // 关闭弹层
+      this.IsChannelEditShow = IsChannelEditShow
     }
   }
 }
